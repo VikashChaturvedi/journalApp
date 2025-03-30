@@ -12,8 +12,7 @@ import java.util.Date;
 
 
 @Document(collection="journal_entries")
-@Getter
-@Setter
+@Data
 public class JournalEntry {
     @Id
     private ObjectId id;
