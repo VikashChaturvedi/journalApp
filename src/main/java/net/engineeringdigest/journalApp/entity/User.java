@@ -1,6 +1,5 @@
 package net.engineeringdigest.journalApp.entity;
 
-import jakarta.annotation.Generated;
 import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="users")
-//@Data doed not provide noargs and all args constructor
+//@Data does not provide no-args and all args constructor
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,5 +33,4 @@ public class User {
     @DBRef
     private List<JournalEntry> journalEntries=new ArrayList<>();
     private List<String> roles;
-
 }
