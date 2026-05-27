@@ -12,8 +12,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
-*.yml
 *.log
+
+# Ignore environment-specific Spring config but keep the base application.yml tracked
+src/main/resources/application-*-local.yml
+src/main/resources/application-secrets.yml
 ### IntelliJ IDEA ###
 .idea
 *.iws

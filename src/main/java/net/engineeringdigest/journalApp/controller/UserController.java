@@ -1,22 +1,17 @@
 package net.engineeringdigest.journalApp.controller;
 
 import net.engineeringdigest.journalApp.api.Response.WeatherResponse;
-import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
-import net.engineeringdigest.journalApp.service.JournalEntryService;
 import net.engineeringdigest.journalApp.service.UserService;
 import net.engineeringdigest.journalApp.service.WeatherService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -47,9 +42,26 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        userInDb.setUserName(user.getUserName());
-        userInDb.setPassword(user.getPassword());
-        userService.saveNewUser(userInDb);
+        if (userInDb == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Only allow updating safe, self-owned fields. Username (identity) and roles
+        // must never be modified through this endpoint.
+        boolean changed = false;
+        if (StringUtils.hasText(user.getPassword())) {
+            userInDb.setPassword(userService.encodePassword(user.getPassword()));
+            changed = true;
+        }
+        if (StringUtils.hasText(user.getEmail())) {
+            userInDb.setEmail(user.getEmail());
+            changed = true;
+        }
+
+        if (!changed) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.saveUser(userInDb);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @DeleteMapping

@@ -1,34 +1,26 @@
 <configuration>
 
-    //appender specifies where the logs should be printed - in terminal or in file
+    <!-- Console appender: prints to stdout -->
     <appender name="myConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-
         <encoder>
-            <pattern>
-                %d{HHmmm:ss.SSS} [%thread] %-5level{36} -%msg%n
-            </pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <!-- Rolling file appender: writes to logs/ with size + time based rolling -->
     <appender name="myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>
-            journalApp.log
-        </file>
-        <rollingpolicy>
-            <fileNamePattern>journalApp  900 111d-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+        <file>logs/journalApp.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/journalApp-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>10</maxHistory>
-        </rollingpolicy>
-
+        </rollingPolicy>
         <encoder>
-            <pattern>
-                %d{HHmmm:ss.SSS} [%thread] %-5level{36} -%msg%n
-            </pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    //below part specifies out of the defined logging functionalities, which should be used
-    <root level = "info">
+    <root level="info">
         <appender-ref ref="myConsoleAppender"/>
         <appender-ref ref="myFileAppender"/>
     </root>

@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class WeatherResponse {
 
-
     private Current current;
+
     @Data
-    public class Current {
+    public static class Current {
 
         @JsonProperty("temp_c")
         private double tempC;
