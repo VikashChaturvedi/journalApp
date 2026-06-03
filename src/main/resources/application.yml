@@ -3,6 +3,10 @@ spring:
     name: journalApp
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
 
   data:
     mongodb:
@@ -29,6 +33,11 @@ server:
 
 weather:
   apikey: ${WEATHER_API_KEY:}
+
+# Redis is disabled by default. Set REDIS_ENABLED=true (and run a Redis instance)
+# along with removing the spring.autoconfigure.exclude entries above to re-enable it.
+redis:
+  enabled: ${REDIS_ENABLED:false}
 
 logging:
   level:

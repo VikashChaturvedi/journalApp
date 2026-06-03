@@ -3,12 +3,14 @@ package net.engineeringdigest.journalApp.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
 @Service
+@ConditionalOnProperty(name = "redis.enabled", havingValue = "true")
 @Slf4j
 public class RedisService {
 
